@@ -5,6 +5,7 @@ import { auth } from '../../Firebase/Firebase.config';
 export const Authcontext=createContext()
 const Authprovider = ({children}) => {
     const [user,setuser]=useState(null)
+    const [loading,setloading]=useState(true)
     const createuser=(email,password)=>{
         return createUserWithEmailAndPassword (auth,email,password)
     }
@@ -17,13 +18,14 @@ const Authprovider = ({children}) => {
     useEffect(()=>{
   const unsubscribe= onAuthStateChanged(auth,(currentUser)=>{
 setuser(currentUser)
+setloading(false)
   })
   return()=>{
 unsubscribe();
   }
     },[])
     const authData={
-        user,setuser,createuser,logout,signIn
+        user,setuser,createuser,logout,signIn,loading,setloading
     }
     return <Authcontext.Provider value={authData}>{children}</Authcontext.Provider>
 };
